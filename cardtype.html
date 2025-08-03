@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇幻卡牌競技場 - 卡牌種類介紹</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #2d1b69 0%, #11998e 30%, #38ef7d 100%);
+            min-height: 100vh;
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 177, 153, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        /* 背景動畫粒子 */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 12s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(1) { width: 4px; height: 4px; left: 10%; background: rgba(255, 215, 0, 0.6); animation-delay: 0s; }
+        .particle:nth-child(2) { width: 6px; height: 6px; left: 20%; background: rgba(138, 43, 226, 0.5); animation-delay: 1s; }
+        .particle:nth-child(3) { width: 3px; height: 3px; left: 30%; background: rgba(0, 255, 255, 0.7); animation-delay: 2s; }
+        .particle:nth-child(4) { width: 5px; height: 5px; left: 40%; background: rgba(255, 105, 180, 0.6); animation-delay: 3s; }
+        .particle:nth-child(5) { width: 4px; height: 4px; left: 50%; background: rgba(50, 205, 50, 0.5); animation-delay: 4s; }
+        .particle:nth-child(6) { width: 7px; height: 7px; left: 60%; background: rgba(255, 69, 0, 0.6); animation-delay: 5s; }
+        .particle:nth-child(7) { width: 3px; height: 3px; left: 70%; background: rgba(147, 112, 219, 0.7); animation-delay: 6s; }
+        .particle:nth-child(8) { width: 5px; height: 5px; left: 80%; background: rgba(255, 215, 0, 0.5); animation-delay: 7s; }
+        .particle:nth-child(9) { width: 4px; height: 4px; left: 90%; background: rgba(0, 191, 255, 0.6); animation-delay: 8s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+        }
+        
+        .game-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+        
+        .game-title {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffd700, #ff6b6b, #4ecdc4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-top: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .card:hover::before {
+            left: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* 卡牌類型特定顏色 */
+        .card.warrior {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(220, 38, 38, 0.4);
+        }
+        
+        .card.archer {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+        
+        .card.rogue {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+        
+        .card.mage {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        
+        .card.elementalist {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(236, 72, 153, 0.4);
+        }
+        
+        .card.bard {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(251, 191, 36, 0.4);
+        }
+        
+        .card.merchant {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+        
+        .card.priest {
+            background: linear-gradient(135deg, rgba(156, 163, 175, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(156, 163, 175, 0.4);
+        }
+        
+        .card.alchemist {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .card-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .card.warrior .card-icon {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+        }
+        
+        .card.archer .card-icon {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+        
+        .card.rogue .card-icon {
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+        }
+        
+        .card.mage .card-icon {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+        
+        .card.elementalist .card-icon {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+        }
+        
+        .card.bard .card-icon {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+        
+        .card.merchant .card-icon {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .card.priest .card-icon {
+            background: linear-gradient(135deg, #9ca3af, #6b7280);
+        }
+        
+        .card.alchemist .card-icon {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .card-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffd700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .damage-value {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .card-effect {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .effect-title {
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .effect-description {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .card-tactics {
+            margin-top: 15px;
+        }
+        
+        .tactics-title {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .tactics-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            line-height: 1.4;
+            font-style: italic;
+        }
+        
+        .special-effect {
+            display: inline-block;
+            background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 5px 5px 0 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .view-card-btn {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .view-card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.1);
+        }
+        
+        .back-button {
+            display: block;
+            width: 200px;
+            margin: 40px auto;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.1);
+        }
+        
+        /* 卡牌預覽模態框 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            width: 90%;
+            max-width: 400px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .close:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+        
+        .card-preview-image {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            border: 3px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .game-title {
+                font-size: 32px;
+            }
+            
+            .page-title {
+                font-size: 22px;
+            }
+            
+            .card-name {
+                font-size: 20px;
+            }
+            
+            .game-logo {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .game-title {
+                font-size: 24px;
+            }
+            
+            .page-title {
+                font-size: 18px;
+            }
+            
+            .card-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .card-actions {
+                flex-direction: column;
+            }
+            
+            .view-card-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="game-logo">
+                <div class="logo-icon">🃏</div>
+                <div>
+                    <h1 class="game-title">奇幻卡牌競技場</h1>
+                    <h2 class="page-title">卡牌種類介紹</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cards-grid">
+            <div class="card warrior" onclick="showCardDetail('劍士')">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="card-icon">⚔️</div>
+                        <h3 class="card-name">劍士</h3>
+                    </div>
+                    <div class="damage-value">15 傷害</div>
+                </div>
+                <div class="card-effect">
+                    <div class="effect-title">卡牌效果</div>
+                    <div class="effect-description">造成 15 點傷害</div>
+                </div>
+                <div class="card-tactics">
+                    <div class="tactics-title">戰術特色</div>
+                    <div class="tactics-description">一般攻擊型角色，穩定輸出</div>
+                </div>
+                <div class="special-effect">穩定輸出</div>
+                <div class="card-actions">
+                    <button class="view-card-btn" onclick="event.stopPropagation(); showCardPreview('劍士')">
+                        🃏 查看卡牌
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card archer" onclick="showCardDetail('弓箭手')">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="card-icon">🏹</div>
+                        <h3 class="card-name">弓箭手</h3>
+                    </div>
+                    <div class="damage-value">12 傷害</div>
+                </div>
+                <div class="card-effect">
+                    <div class="effect-title">卡牌效果</div>
+                    <div class="effect-description">造成 12 點傷害</div>
+                </div>
+                <div class="card-tactics">
+                    <div class="tactics-title">戰術特色</div>
+                    <div class="tactics-description">較低攻擊，但適合快攻節奏</div>
+                </div>
+                <div class="special-effect">快攻節奏</div>
+                <div class="card-actions">
+                    <button class="view-card-btn" onclick="event.stopPropagation(); showCardPreview('弓箭手')">
+                        🃏 查看卡牌
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card rogue" onclick="showCardDetail('盜賊')">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="card-icon">🗡️</div>
+                        <h3 class="card-name">盜賊</h3>
+                    </div>
+                    <div class="damage-value">8 傷害</div>
+                </div>
+                <div class="card-effect">
+                    <div class="effect-title">卡牌效果</div>
+                    <div class="effect-description">造成 8 點傷害，獲得 1 次額外行動</div>
+                </div>
+                <div class="card-tactics">
+                    <div class="tactics-title">戰術特色</div>
+                    <div class="tactics-description">擅長連擊與速攻</div>
+                </div>
+                <div class="special-effect">額外行動</div>
+                <div class="special-effect">連擊</div>
+                <div class="card-actions">
+                    <button class="view-card-btn" onclick="event.stopPropagation(); showCardPreview('盜賊')">
+                        🃏 查看卡牌
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card mage" onclick="showCardDetail('魔法師')">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="card-icon">🔮</div>
+                        <h3 class="card-name">魔法師</h3>
+                    </div>
+                    <div class="damage-value">10 傷害</div>
+                </div>
+                <div class="card-effect">
+                    <div class="effect-title">卡牌效果</div>
+                    <div class="effect-description">無視護盾，造成 10 點傷害</div>
+                </div>
+                <div class="card-tactics">
+                    <div class="tactics-title">戰術特色</div>
+                    <div class="tactics-description">破盾法術，直擊敵人</div>
+                </div>
+                <div class="special-effect">無視護盾</div>
+                <div class="special-effect">破盾法術</div>
+                <div class="card-actions">
+                    <button class="view-card-btn" onclick="event.stopPropagation(); showCardPreview('魔法師')">
+                        🃏 查看卡牌
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card elementalist" onclick="showCardDetail('元素使')">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="card-icon">🌟</div>
+                        <h3 class="card-name">元素使</h3>
+                    </div>
+                    <div class="damage-value">6 傷害</div>
+                </div>
+                <div class="card-effect">
+                    <div class="effect-title">卡牌效果</div>
+                    <div class="effect-description">造成 6 點傷害，獲得 10 點護盾</div>
+                </div>
+                <div class="card-tactics">
+                    <div class="tactics-title">戰術特色</div>
+                    <div class="tactics-description">攻守兼備，元素護體</div>
+                </div>
+                <div class="special-effect">護盾生成</div>
+                <div class="special-effect">攻守兼備</div>
+                <div class="card-actions">
+                    <button class="view-card-btn" onclick="event.stopPropagation(); showCardPreview('元素使')">
+                        🃏 查看卡牌
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card bard" onclick="showCardDetail('吟遊詩人')">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="card-icon">🎵</div>
+                        <h3 class="card-name">吟遊詩人</h3>
+                    </div>
+                    <div class="damage-value">治癒</div>
+                </div>
+                <div class="card-effect">
+                    <div class="effect-title">卡牌效果</div>
+                    <div class="effect-description">恢復 5 點生命，獲得 5 點護盾</div>
+                </div>
+                <div class="card-tactics">
+                    <div class="tactics-title">戰術特色</div>
+                    <div class="tactics-description">支援型角色，輕度補給</div>
+                </div>
+                <div class="special-effect">生命恢復</div>
+                <div class="special-effect">護盾生成</div>
+                <div class="card-actions">
+                    <button class="view-card-btn" onclick="event.stopPropagation(); showCardPreview('吟遊詩人')">
+                        🃏 查看卡牌
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card merchant" onclick="showCardDetail('商人')">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="card-icon">💰</div>
+                        <h3 class="card-name">商人</h3>
+                    </div>
+                    <div class="damage-value">特殊</div>
+                </div>
+                <div class="card-effect">
+                    <div class="effect-title">卡牌效果</div>
+                    <div class="effect-description">獲得 1 次額外行動</div>
+                </div>
+                <div class="card-tactics">
+                    <div class="tactics-title">戰術特色</div>
+                    <div class="tactics-description">操控時間的交易者</div>
+                </div>
+                <div class="special-effect">額外行動</div>
+                <div class="special-effect">時間操控</div>
+                <div class="card-actions">
+                    <button class="view-card-btn" onclick="event.stopPropagation(); showCardPreview('商人')">
+                        🃏 查看卡牌
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card priest" onclick="showCardDetail('祭司')">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="card-icon">⛪</div>
+                        <h3 class="card-name">祭司</h3>
+                    </div>
+                    <div class="damage-value">強力治癒</div>
+                </div>
+                <div class="card-effect">
+                    <div class="effect-title">卡牌效果</div>
+                    <div class="effect-description">恢復 15 點生命</div>
+                </div>
+                <div class="card-tactics">
+                    <div class="tactics-title">戰術特色</div>
+                    <div class="tactics-description">強力治癒術，穩固陣腳</div>
+                </div>
+                <div class="special-effect">強力治癒</div>
+                <div class="special-effect">穩固陣腳</div>
+                <div class="card-actions">
+                    <button class="view-card-btn" onclick="event.stopPropagation(); showCardPreview('祭司')">
+                        🃏 查看卡牌
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card alchemist" onclick="showCardDetail('煉金術師')">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="card-icon">⚗️</div>
+                        <h3 class="card-name">煉金術師</h3>
+                    </div>
+                    <div class="damage-value">5 傷害</div>
+                </div>
+                <div class="card-effect">
+                    <div class="effect-title">卡牌效果</div>
+                    <div class="effect-description">造成 5 點傷害，恢復 10 點生命</div>
+                </div>
+                <div class="card-tactics">
+                    <div class="tactics-title">戰術特色</div>
+                    <div class="tactics-description">混合傷害與治癒的萬用卡</div>
+                </div>
+                <div class="special-effect">混合效果</div>
+                <div class="special-effect">萬用卡</div>
+                <div class="card-actions">
+                    <button class="view-card-btn" onclick="event.stopPropagation(); showCardPreview('煉金術師')">
+                        🃏 查看卡牌
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <a href="#" class="back-button" onclick="goBack()">🏠 返回首頁</a>
+    </div>
+    
+    <div id="cardModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="cardPreview" class="card-preview-container">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        const cardImages = {
+            '劍士': 'SWORDSMAN.png',
+            '弓箭手': 'ARCHER.png',
+            '盜賊': 'THIEF.png',
+            '魔法師': 'MAGE.png',
+            '元素使': 'ELEMENTALIST.png',
+            '吟遊詩人': 'BARD.png',
+            '商人': 'MERCHANT.png',
+            '祭司': 'PRIEST.png',
+            '煉金術師': 'ALCHEMIST.png'
+        };
+
+        function showCardDetail(cardName) {
+            const cardDetails = {
+                '劍士': {
+                    damage: 15,
+                    effect: '造成 15 點傷害',
+                    tactics: '一般攻擊型角色，穩定輸出',
+                    tips: '劍士是最可靠的攻擊選擇，適合新手玩家使用。在需要穩定傷害輸出時，劍士是你最好的夥伴。'
+                },
+                '弓箭手': {
+                    damage: 12,
+                    effect: '造成 12 點傷害',
+                    tactics: '較低攻擊，但適合快攻節奏',
+                    tips: '弓箭手雖然傷害較低，但在快攻戰術中非常有效。適合與其他快攻卡牌組合使用。'
+                },
+                '盜賊': {
+                    damage: 8,
+                    effect: '造成 8 點傷害，獲得 1 次額外行動',
+                    tactics: '擅長連擊與速攻',
+                    tips: '盜賊的額外行動能力讓你在一回合內進行更多操作，是連擊戰術的核心卡牌。'
+                },
+                '魔法師': {
+                    damage: 10,
+                    effect: '無視護盾，造成 10 點傷害',
+                    tactics: '破盾法術，直擊敵人',
+                    tips: '魔法師能夠無視敵人的護盾防禦，是對付高防禦敵人的最佳選擇。'
+                },
+                '元素使': {
+                    damage: 6,
+                    effect: '造成 6 點傷害，獲得 10 點護盾',
+                    tactics: '攻守兼備，元素護體',
+                    tips: '元素使提供了攻擊和防禦的平衡，適合需要持久戰的情況。護盾能有效保護你的生命值。'
+                },
+                '吟遊詩人': {
+                    damage: '治癒',
+                    effect: '恢復 5 點生命，獲得 5 點護盾',
+                    tactics: '支援型角色，輕度補給',
+                    tips: '吟遊詩人是優秀的支援角色，能同時提供生命恢復和護盾保護。適合在戰鬥中期穩固陣腳。'
+                },
+                '商人': {
+                    damage: '特殊',
+                    effect: '獲得 1 次額外行動',
+                    tactics: '操控時間的交易者',
+                    tips: '商人的時間操控能力讓你獲得戰術優勢。額外行動可以讓你在關鍵時刻扭轉戰局。'
+                },
+                '祭司': {
+                    damage: '強力治癒',
+                    effect: '恢復 15 點生命',
+                    tactics: '強力治癒術，穩固陣腳',
+                    tips: '祭司擁有最強的治癒能力，是生存戰術的核心。在生命值危險時，祭司能讓你重新站穩腳跟。'
+                },
+                '煉金術師': {
+                    damage: 5,
+                    effect: '造成 5 點傷害，恢復 10 點生命',
+                    tactics: '混合傷害與治癒的萬用卡',
+                    tips: '煉金術師是真正的萬用卡，能同時攻擊敵人和治癒自己。在任何情況下都能發揮作用。'
+                }
+            };
+            
+            const card = cardDetails[cardName];
+            if (card) {
+                alert(`🃏 ${cardName} 詳細資訊\n\n💥 傷害：${card.damage} 點\n✨ 效果：${card.effect}\n⚔️ 戰術：${card.tactics}\n\n💡 使用技巧：${card.tips}`);
+            }
+        }
+        
+        function showCardPreview(cardName) {
+            const cardPreviewContainer = document.getElementById('cardPreview');
+            const imageName = cardImages[cardName];
+            if (imageName) {
+                // 清除舊內容
+                cardPreviewContainer.innerHTML = ''; 
+                
+                // 創建並設定圖片元素
+                const imageElement = document.createElement('img');
+                imageElement.src = `images/${imageName}`;
+                imageElement.alt = `${cardName} 卡牌圖片`;
+                imageElement.className = 'card-preview-image';
+                
+                // 將圖片加入模態框
+                cardPreviewContainer.appendChild(imageElement);
+                
+                // 顯示模態框
+                document.getElementById('cardModal').style.display = 'block';
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('cardModal').style.display = 'none';
+        }
+        
+        // 點擊模態框外部關閉
+        window.onclick = function(event) {
+            const modal = document.getElementById('cardModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // ESC 鍵關閉模態框
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        function goBack() {
+            alert('🎮 返回遊戲首頁\n\n在實際應用中，這裡會導航回到遊戲主選單。');
+        }
+        
+        // 添加更多魔法粒子
+        function createMagicParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.width = (Math.random() * 4 + 2) + 'px';
+            particle.style.height = particle.style.width;
+            
+            const colors = [
+                'rgba(255, 215, 0, 0.6)',
+                'rgba(220, 38, 38, 0.5)',
+                'rgba(34, 197, 94, 0.6)',
+                'rgba(168, 85, 247, 0.5)',
+                'rgba(59, 130, 246, 0.6)',
+                'rgba(236, 72, 153, 0.5)'
+            ];
+            
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.animationDuration = (Math.random() * 6 + 10) + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.querySelector('.particles').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 15000);
+        }
+        
+        // 定期創建新的魔法粒子
+        setInterval(createMagicParticle, 2500);
+        
+        // 卡牌懸停音效模擬
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                // 模擬卡牌懸停音效
+                console.log('🎵 卡牌懸停音效');
+            });
+            
+            card.addEventListener('click', function() {
+                // 模擬卡牌點擊音效
+                console.log('🎵 卡牌選擇音效');
+            });
+        });
+        
+        // 滾動動畫效果
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 初始化動畫
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            observer.observe(card);
+        });
+        
+        // 歡迎訊息
+        setTimeout(() => {
+            console.log('🃏 歡迎查看奇幻卡牌競技場的卡牌種類！');
+            console.log('✨ 點擊任何卡牌來了解詳細資訊！');
+            console.log('🎴 點擊「查看卡牌」按鈕可以預覽卡牌樣式！');
+        }, 1000);
+    </script>
+</body>
+</html>
